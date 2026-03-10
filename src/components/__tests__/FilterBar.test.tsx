@@ -7,20 +7,29 @@ import { render, fireEvent, screen } from '@testing-library/react-native'
 import { FilterBar } from '../FilterBar'
 import { FilterType } from '@/types/todo.types'
 
+const defaultCounts: Record<FilterType, number> = { all: 5, active: 3, completed: 2 }
+
 // Ortak render yardımcısı
 const renderFilterBar = (
   currentFilter: FilterType = 'all',
-  onFilterChange: jest.Mock = jest.fn()
+  onFilterChange: jest.Mock = jest.fn(),
+  counts: Record<FilterType, number> = defaultCounts
 ) =>
-  render(<FilterBar currentFilter={currentFilter} onFilterChange={onFilterChange} />)
+  render(
+    <FilterBar
+      currentFilter={currentFilter}
+      onFilterChange={onFilterChange}
+      counts={counts}
+    />
+  )
 
 describe('FilterBar', () => {
   describe('render', () => {
     it('should render three filter buttons', () => {
       renderFilterBar()
-      expect(screen.getByText('Tümü')).toBeTruthy()
-      expect(screen.getByText('Aktif')).toBeTruthy()
-      expect(screen.getByText('Tamamlandı')).toBeTruthy()
+      expect(screen.getByText('Tümü (5)')).toBeTruthy()
+      expect(screen.getByText('Aktif (3)')).toBeTruthy()
+      expect(screen.getByText('Tamamlandı (2)')).toBeTruthy()
     })
 
     it('should render Tümü button with testID filter-all', () => {
@@ -36,6 +45,42 @@ describe('FilterBar', () => {
     it('should render Tamamlandı button with testID filter-completed', () => {
       renderFilterBar()
       expect(screen.getByTestId('filter-completed')).toBeTruthy()
+    })
+  })
+
+  describe('counts gösterimi', () => {
+    it('should render counts in button labels', () => {
+      renderFilterBar('all', jest.fn(), { all: 10, active: 7, completed: 3 })
+      expect(screen.getByText('Tümü (10)')).toBeTruthy()
+      expect(screen.getByText('Aktif (7)')).toBeTruthy()
+      expect(screen.getByText('Tamamlandı (3)')).toBeTruthy()
+    })
+
+    it('should render zero counts in button labels', () => {
+      renderFilterBar('all', jest.fn(), { all: 0, active: 0, completed: 0 })
+      expect(screen.getByText('Tümü (0)')).toBeTruthy()
+      expect(screen.getByText('Aktif (0)')).toBeTruthy()
+      expect(screen.getByText('Tamamlandı (0)')).toBeTruthy()
+    })
+
+    it('should update counts when re-rendered with new counts', () => {
+      const { rerender } = renderFilterBar('all', jest.fn(), { all: 2, active: 1, completed: 1 })
+
+      expect(screen.getByText('Tümü (2)')).toBeTruthy()
+      expect(screen.getByText('Aktif (1)')).toBeTruthy()
+      expect(screen.getByText('Tamamlandı (1)')).toBeTruthy()
+
+      rerender(
+        <FilterBar
+          currentFilter="all"
+          onFilterChange={jest.fn()}
+          counts={{ all: 8, active: 5, completed: 3 }}
+        />
+      )
+
+      expect(screen.getByText('Tümü (8)')).toBeTruthy()
+      expect(screen.getByText('Aktif (5)')).toBeTruthy()
+      expect(screen.getByText('Tamamlandı (3)')).toBeTruthy()
     })
   })
 
@@ -127,7 +172,11 @@ describe('FilterBar', () => {
 
       expect(() =>
         rerender(
-          <FilterBar currentFilter="completed" onFilterChange={jest.fn()} />
+          <FilterBar
+            currentFilter="completed"
+            onFilterChange={jest.fn()}
+            counts={defaultCounts}
+          />
         )
       ).not.toThrow()
 

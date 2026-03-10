@@ -235,6 +235,20 @@ describe('HomeScreen', () => {
       const completedButton = screen.getByTestId('filter-completed')
       expect(completedButton.props.accessibilityState?.selected).toBe(true)
     })
+
+    it('should pass correct counts to FilterBar based on todos in store', () => {
+      // baseTodo: completed=false (active), completedTodo: completed=true
+      mockUseTodoStore.mockReturnValue({
+        ...defaultStoreState,
+        todos: [baseTodo, completedTodo],
+      })
+      mockUseFilteredTodos.mockReturnValue([baseTodo, completedTodo])
+      render(<HomeScreen />)
+      // all=2, active=1, completed=1 olarak hesaplanmalı ve label'lara yansımalı
+      expect(screen.getByText('Tümü (2)')).toBeTruthy()
+      expect(screen.getByText('Aktif (1)')).toBeTruthy()
+      expect(screen.getByText('Tamamlandı (1)')).toBeTruthy()
+    })
   })
 
   describe('TodoItem entegrasyonu', () => {

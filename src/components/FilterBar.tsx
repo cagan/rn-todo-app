@@ -5,6 +5,7 @@ import { FilterType } from '@/types/todo.types'
 interface FilterBarProps {
   currentFilter: FilterType
   onFilterChange: (filter: FilterType) => void
+  counts: Record<FilterType, number>
 }
 
 const FILTER_LABELS: Record<FilterType, string> = {
@@ -15,7 +16,7 @@ const FILTER_LABELS: Record<FilterType, string> = {
 
 const FILTERS: FilterType[] = ['all', 'active', 'completed']
 
-export const FilterBar = memo(({ currentFilter, onFilterChange }: FilterBarProps) => {
+export const FilterBar = memo(({ currentFilter, onFilterChange, counts }: FilterBarProps) => {
   return (
     <View style={styles.container}>
       {FILTERS.map((filter) => {
@@ -30,7 +31,7 @@ export const FilterBar = memo(({ currentFilter, onFilterChange }: FilterBarProps
             accessibilityRole="button"
           >
             <Text style={[styles.buttonText, isActive && styles.activeText]}>
-              {FILTER_LABELS[filter]}
+              {`${FILTER_LABELS[filter]} (${counts[filter]})`}
             </Text>
           </TouchableOpacity>
         )

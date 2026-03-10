@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect, useCallback } from 'react'
+import React, { memo, useState, useEffect, useCallback, useMemo } from 'react'
 import { View, FlatList, ActivityIndicator, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useTodoStore, useFilteredTodos } from '@/store/todo.store'
 import { TodoItem } from '@/components/TodoItem'
@@ -24,6 +24,12 @@ export const HomeScreen = memo(() => {
 
   const filteredTodos = useFilteredTodos()
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
+
+  const counts = useMemo(() => ({
+    all: todos.length,
+    active: todos.filter((t) => !t.completed).length,
+    completed: todos.filter((t) => t.completed).length,
+  }), [todos])
 
   useEffect(() => {
     loadTodos()
@@ -67,7 +73,7 @@ export const HomeScreen = memo(() => {
   return (
     <View style={styles.container}>
       <AddTodoInput onAdd={addTodo} />
-      <FilterBar currentFilter={filter} onFilterChange={setFilter} />
+      <FilterBar currentFilter={filter} onFilterChange={setFilter} counts={counts} />
 
       {error && (
         <View style={styles.errorContainer}>
