@@ -283,6 +283,106 @@ describe('useTodoStore', () => {
     })
   })
 
+  describe('toggleTodo', () => {
+    it('should toggle completed state from false to true', async () => {
+      await act(async () => {
+        await useTodoStore.getState().addTodo('Toggle Test')
+      })
+      const id = useTodoStore.getState().todos[0].id
+
+      await act(async () => {
+        await useTodoStore.getState().toggleTodo(id)
+      })
+
+      expect(useTodoStore.getState().todos[0].completed).toBe(true)
+    })
+
+    it('should toggle completed state from true back to false', async () => {
+      await act(async () => {
+        await useTodoStore.getState().addTodo('Toggle Test')
+      })
+      const id = useTodoStore.getState().todos[0].id
+
+      await act(async () => {
+        await useTodoStore.getState().toggleTodo(id)
+        await useTodoStore.getState().toggleTodo(id)
+      })
+
+      expect(useTodoStore.getState().todos[0].completed).toBe(false)
+    })
+
+    it('should persist toggled state to storage', async () => {
+      await act(async () => {
+        await useTodoStore.getState().addTodo('Toggle Persist')
+      })
+      const id = useTodoStore.getState().todos[0].id
+      jest.clearAllMocks()
+
+      await act(async () => {
+        await useTodoStore.getState().toggleTodo(id)
+      })
+
+      expect(storageService.saveTodos).toHaveBeenCalledTimes(1)
+    })
+
+    it('should set error when storage fails during toggle', async () => {
+      await act(async () => {
+        await useTodoStore.getState().addTodo('Toggle Error')
+      })
+      const id = useTodoStore.getState().todos[0].id
+      ;(storageService.saveTodos as jest.Mock).mockRejectedValueOnce(new Error('fail'))
+
+      await act(async () => {
+        await useTodoStore.getState().toggleTodo(id)
+      })
+
+      expect(useTodoStore.getState().error).toBe('Değişiklik kaydedilemedi.')
+    })
+  })
+
+  describe('deleteTodo', () => {
+    it('should remove todo from list', async () => {
+      await act(async () => {
+        await useTodoStore.getState().addTodo('Delete Me')
+      })
+      const id = useTodoStore.getState().todos[0].id
+
+      await act(async () => {
+        await useTodoStore.getState().deleteTodo(id)
+      })
+
+      expect(useTodoStore.getState().todos).toHaveLength(0)
+    })
+
+    it('should persist deletion to storage', async () => {
+      await act(async () => {
+        await useTodoStore.getState().addTodo('Delete Persist')
+      })
+      const id = useTodoStore.getState().todos[0].id
+      jest.clearAllMocks()
+
+      await act(async () => {
+        await useTodoStore.getState().deleteTodo(id)
+      })
+
+      expect(storageService.saveTodos).toHaveBeenCalledWith([])
+    })
+
+    it('should set error when storage fails during delete', async () => {
+      await act(async () => {
+        await useTodoStore.getState().addTodo('Delete Error')
+      })
+      const id = useTodoStore.getState().todos[0].id
+      ;(storageService.saveTodos as jest.Mock).mockRejectedValueOnce(new Error('fail'))
+
+      await act(async () => {
+        await useTodoStore.getState().deleteTodo(id)
+      })
+
+      expect(useTodoStore.getState().error).toBe('Todo silinemedi.')
+    })
+  })
+
   describe('loadTodos', () => {
     it('should load todos with priority from storage', async () => {
       const storedTodos = [
@@ -301,8 +401,57 @@ describe('useTodoStore', () => {
       })
 
       const todos = useTodoStore.getState().todos
-      // Yüklenen todo'nun priority'si korunmalı
       expect(todos[0].priority).toBe('high')
+    })
+
+    it('should set isLoading during load', async () => {
+      (storageService.loadTodos as jest.Mock).mockResolvedValueOnce([])
+
+      await act(async () => {
+        await useTodoStore.getState().loadTodos()
+      })
+
+      expect(useTodoStore.getState().isLoading).toBe(false)
+    })
+
+    it('should set error when load fails', async () => {
+      (storageService.loadTodos as jest.Mock).mockRejectedValueOnce(new Error('fail'))
+
+      await act(async () => {
+        await useTodoStore.getState().loadTodos()
+      })
+
+      expect(useTodoStore.getState().error).toBe('Todolar yüklenemedi.')
+      expect(useTodoStore.getState().isLoading).toBe(false)
+    })
+  })
+
+  describe('setFilter', () => {
+    it('should update filter state', () => {
+      act(() => {
+        useTodoStore.getState().setFilter('active')
+      })
+      expect(useTodoStore.getState().filter).toBe('active')
+
+      act(() => {
+        useTodoStore.getState().setFilter('completed')
+      })
+      expect(useTodoStore.getState().filter).toBe('completed')
+    })
+  })
+
+  describe('clearError', () => {
+    it('should clear error state', async () => {
+      (storageService.saveTodos as jest.Mock).mockRejectedValueOnce(new Error('fail'))
+      await act(async () => {
+        await useTodoStore.getState().addTodo('Error Todo')
+      })
+      expect(useTodoStore.getState().error).not.toBeNull()
+
+      act(() => {
+        useTodoStore.getState().clearError()
+      })
+      expect(useTodoStore.getState().error).toBeNull()
     })
   })
 })
