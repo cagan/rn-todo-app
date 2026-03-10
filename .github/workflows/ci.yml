@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test with coverage
+        run: npm run test:coverage
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        if: always()
+
+  claude-review:
+    name: Claude Code Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Claude PR Review
+        uses: anthropics/claude-code-action@beta
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # code-reviewer subagent'ı kullanarak PR review yap
+          direct_prompt: |
+            Bu PR'ı CLAUDE.md ve rules/ klasörüne göre review et.
+            Özellikle şunlara bak:
+            - rules/coding-standards.md uyumu
+            - rules/testing-standards.md uyumu
+            - TypeScript strict mode ihlalleri
+            - Test coverage yeterliliği
+
+            Severity formatını kullan: 🔴 CRITICAL / 🟡 MAJOR / 🔵 MINOR
