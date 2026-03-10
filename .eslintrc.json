@@ -1,0 +1,21 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": { "jsx": true },
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": { "version": "detect" }
+  },
+  "rules": {
+    "@typescript-eslint/no-require-imports": "off",
+    "@typescript-eslint/no-var-requires": "off"
+  },
+  "ignorePatterns": ["node_modules/", "dist/", "coverage/"]
+}

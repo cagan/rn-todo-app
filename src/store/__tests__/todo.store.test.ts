@@ -137,7 +137,7 @@ describe('useTodoStore', () => {
     })
 
     it('should set error when storage fails', async () => {
-      ;(storageService.saveTodos as jest.Mock).mockRejectedValueOnce(new Error('Storage full'))
+      (storageService.saveTodos as jest.Mock).mockRejectedValueOnce(new Error('Storage full'))
 
       await act(async () => {
         await useTodoStore.getState().addTodo('Test Todo', 'medium')

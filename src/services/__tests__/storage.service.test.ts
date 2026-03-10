@@ -56,26 +56,26 @@ describe('storageService', () => {
     })
 
     it('should throw on AsyncStorage error', async () => {
-      ;(AsyncStorage.setItem as jest.Mock).mockRejectedValueOnce(new Error('Storage full'))
+      (AsyncStorage.setItem as jest.Mock).mockRejectedValueOnce(new Error('Storage full'))
       await expect(storageService.saveTodos(mockTodos)).rejects.toThrow('Failed to save todos')
     })
   })
 
   describe('loadTodos', () => {
     it('should return empty array when no data exists', async () => {
-      ;(AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(null)
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(null)
       const result = await storageService.loadTodos()
       expect(result).toEqual([])
     })
 
     it('should deserialize dates from string', async () => {
-      ;(AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockTodos))
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockTodos))
       const result = await storageService.loadTodos()
       expect(result[0].createdAt).toBeInstanceOf(Date)
     })
 
     it('should preserve priority field when loading todos', async () => {
-      ;(AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockTodos))
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockTodos))
       const result = await storageService.loadTodos()
       // Priority değerleri kayıp olmadan yüklenmeli
       expect(result[0].priority).toBe('low')
@@ -114,7 +114,7 @@ describe('storageService', () => {
     })
 
     it('should throw on parse error', async () => {
-      ;(AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce('invalid json{{{')
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce('invalid json{{{')
       await expect(storageService.loadTodos()).rejects.toThrow('Failed to load todos')
     })
   })
