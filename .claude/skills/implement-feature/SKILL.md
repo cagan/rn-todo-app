@@ -32,19 +32,20 @@ Blueprint çıkana kadar bekle.
 Test dosyaları yazılana kadar bekle. (RED aşaması)
 
 ### Adım 4: Implementation (Ana Agent)
+Önce `.claude/project.conf` dosyasını oku — CMD_TEST komutunu ve dizin yapısını oradan al.
 Sırayla implement et — her adımdan sonra testleri çalıştır:
-1. Type/interface tanımları
-2. Service/storage katmanı
-3. Store (Zustand)
-4. Component(ler)
-5. Ekrana entegrasyon
-6. `npm test` çalıştır → GREEN aşaması
+1. Type/interface/model tanımları
+2. Service/data katmanı
+3. State management katmanı
+4. UI katmanı (component/view/page)
+5. Ekrana/route'a entegrasyon
+6. `CMD_TEST` çalıştır → GREEN aşaması
 
 ### Adım 5: Refactor
 GREEN'e ulaşıldıktan sonra:
 - Kodun okunabilirliğini artır (davranışı değiştirmeden)
 - Tekrar eden kod varsa extract et
-- `npm test` tekrar çalıştır — hâlâ GREEN mi?
+- `CMD_TEST` tekrar çalıştır — hâlâ GREEN mi?
 
 ### Adım 6: Review (@code-reviewer subagent)
 @code-reviewer subagent'ını tüm değişen dosyalarla çağır.

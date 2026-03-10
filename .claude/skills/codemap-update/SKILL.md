@@ -17,43 +17,16 @@ güncel bir harita tut.
 ### 1. Mevcut Codemap Kontrol Et
 `.claude/codemap.md` dosyası var mı? Yoksa oluştur.
 
-### 2. Proje Yapısını Tara
-```bash
-find src/ -name "*.ts" -o -name "*.tsx" | sort
-```
+### 2. Config Oku
+`.claude/project.conf` dosyasını oku — DIR_SRC, FILE_EXT_SOURCE ve dizin yapısını al.
 
-### 3. Codemap'i Güncelle
-`.claude/codemap.md` dosyasına şunu yaz:
+### 3. Proje Yapısını Tara
+project.conf'daki DIR_SRC ve FILE_EXT_SOURCE değerlerini kullanarak dosyaları bul.
 
-```markdown
-# Codemap — [tarih]
-
-## Screens
-- src/screens/HomeScreen.tsx → Ana ekran, todo listesi
-- src/screens/AddTodoScreen.tsx → Yeni todo ekleme formu
-
-## Components
-- src/components/TodoItem.tsx → Tekil todo satırı (toggle, delete)
-- src/components/TodoList.tsx → Todo listesi (FlatList wrapper)
-- src/components/AddTodoInput.tsx → Input + buton
-
-## Hooks
-- src/hooks/useTodos.ts → Todo CRUD operasyonları
-- src/hooks/useFilter.ts → Filtre state'i
-
-## Store
-- src/store/todo.store.ts → Zustand todo store
-  - State: todos[], filter, loading
-  - Actions: addTodo, toggleTodo, deleteTodo, setFilter
-
-## Services  
-- src/services/storage.service.ts → AsyncStorage wrapper
-  - saveTodos(), loadTodos(), clearTodos()
-
-## Tests
-- src/components/__tests__/TodoItem.test.tsx
-- src/hooks/__tests__/useTodos.test.ts
-```
+### 4. Codemap'i Güncelle
+`.claude/codemap.md` dosyasına projenin dizin yapısına göre harita yaz.
+Her dizin (DIR_COMPONENTS, DIR_SCREENS, DIR_STORE, vb.) için ayrı bölüm oluştur.
+Her dosya için kısa açıklama ekle (dosyayı okuyarak).
 
 ### 4. Checkpoint Notu Ekle
 Codemap'in sonuna:

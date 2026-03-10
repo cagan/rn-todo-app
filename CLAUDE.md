@@ -1,14 +1,19 @@
 # RN Todo App — Agent Harness
 
+## Project Config
+Projeye özel tüm değişkenler `.claude/project.conf` dosyasında tanımlıdır.
+Agent'lar, skill'ler ve hook'lar bu dosyadan okur.
+**Yeni bir projeye taşırken sadece `project.conf` değiştirilir.**
+
 ## Stack
 - React Native (Expo), TypeScript, Zustand (state), AsyncStorage (persistence)
 - Jest + React Native Testing Library (unit/integration)
 - EAS Build (distribution)
 
-## Rules (her zaman uy — bunlar .rules/ klasöründe detaylıdır)
-- Commit atmadan önce tüm testler geçmeli (`npm test`)
+## Rules (her zaman uy — bunlar rules/ klasöründe detaylıdır)
+- Commit atmadan önce tüm testler geçmeli (project.conf: `CMD_TEST`)
 - `main` branch'e direkt commit yok — her zaman feature branch
-- Fonksiyon başına max 30 satır, component başına max 150 satır
+- Fonksiyon başına max 30 satır, component başına max 150 satır (project.conf: `MAX_FUNCTION_LINES`, `MAX_FILE_LINES`)
 - Her yeni component için mutlaka test dosyası yaz
 - TypeScript strict mode — `any` kullanma
 - Console.log bırakma — logger utility kullan

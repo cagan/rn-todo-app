@@ -1,22 +1,22 @@
 #!/bin/bash
 # post-write-lint.sh
-# Write sonrası hafif lint hint — BLOKLAMA YOK, sadece bilgi
+# Write sonrasi hafif lint hint — BLOKLAMA YOK, sadece bilgi
 # Komutlar .claude/project.conf'dan okunur
 
 FILE_PATH="${CLAUDE_TOOL_RESULT:-}"
 
-# project.conf'u yükle
+# project.conf'u yukle
 CONF="${CLAUDE_PROJECT_DIR:-.}/.claude/project.conf"
 if [ -f "$CONF" ]; then
   source "$CONF"
 fi
 
-# CMD_LINT tanımlı değilse veya dosya kaynak uzantısı değilse çık
+# CMD_LINT tanimli degilse veya dosya kaynak uzantisi degilse cik
 if [ -z "$CMD_LINT" ] || [ -z "$FILE_EXT_SOURCE" ]; then
   exit 0
 fi
 
-# Dosya uzantısını kontrol et (FILE_EXT_SOURCE: "ts,tsx")
+# Dosya uzantisini kontrol et (FILE_EXT_SOURCE: "ts,tsx")
 EXT="${FILE_PATH##*.}"
 if echo "$FILE_EXT_SOURCE" | grep -q "$EXT"; then
   ISSUES=$($CMD_LINT "$FILE_PATH" --format compact 2>/dev/null | wc -l)
@@ -25,4 +25,4 @@ if echo "$FILE_EXT_SOURCE" | grep -q "$EXT"; then
   fi
 fi
 
-exit 0  # Her zaman 0 — ASLA bloklama
+exit 0

@@ -14,10 +14,10 @@ Her adımda kullanıcı onayı **zorunludur** — onaysız ilerleme yapma.
 ## Pipeline Adımları
 
 ### Adım 1: Quality Gate
-Aşağıdaki kontrolleri çalıştır:
+Önce `.claude/project.conf` dosyasını oku. Ardından aşağıdaki kontrolleri çalıştır:
 ```bash
-npm test
-npx tsc --noEmit
+$CMD_TEST        # project.conf'dan
+$CMD_TYPECHECK   # project.conf'dan (tanımlıysa)
 ```
 
 Tüm kontroller geçmeli. Herhangi biri başarısız olursa:
@@ -37,7 +37,7 @@ Kullanıcıya göster:
 - Değişen dosya sayısı
 - Son commit'ler
 
-**Kural:** `main` branch'teysen uyar ve feature branch oluşturmayı öner.
+**Kural:** project.conf'daki `MAIN_BRANCH` üzerindeysen uyar ve feature branch oluşturmayı öner.
 
 ### Adım 3: Commit (Onay Gerekli)
 1. Değişen dosyaları listele
@@ -70,7 +70,7 @@ Pipeline tamamlandığında göster:
 
 ## Önemli Kurallar
 - **ASLA** kullanıcı onayı almadan commit, push veya PR oluşturma
-- **ASLA** main branch'e direkt push yapma
+- **ASLA** MAIN_BRANCH'e (project.conf) direkt push yapma
 - **ASLA** force push kullanma
 - Her adımda ne olacağını ÖNCE açıkla, SONRA onay iste
 - Hata durumunda pipeline'ı durdur, kullanıcıya raporla

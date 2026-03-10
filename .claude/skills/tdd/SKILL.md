@@ -13,6 +13,9 @@ Bu skill, mevcut veya yeni kod için TDD döngüsünü uygular.
 
 ## Adımlar
 
+### 0. Config Oku
+`.claude/project.conf` dosyasını oku — CMD_TEST, DIR_SRC, FILE_EXT_TEST değerlerini al.
+
 ### 1. Hedefi Belirle
 - Hangi dosya/component test edilecek?
 - Mevcut test dosyası var mı? (kontrol et)
@@ -28,18 +31,18 @@ rules/testing-standards.md'ye göre:
 
 ### 4. Testleri Yaz (RED)
 Önce failing testleri yaz.
-`npm test -- --testPathPattern=FileName` ile confirm et — fail olması beklenen.
+`CMD_TEST (project.conf'dan) -- --testPathPattern=FileName` ile confirm et — fail olması beklenen.
 
 ### 5. Implementation (GREEN)
 Testleri geçirecek minimum kodu yaz.
-`npm test` çalıştır — GREEN olana kadar iterate et.
+`CMD_TEST (project.conf'dan)` çalıştır — GREEN olana kadar iterate et.
 
 ### 6. Refactor
 Testler GREEN iken kodu temizle.
-`npm test` tekrar çalıştır — GREEN'de kaldığını doğrula.
+`CMD_TEST (project.conf'dan)` tekrar çalıştır — GREEN'de kaldığını doğrula.
 
 ### 7. Coverage Raporu
-`npm test -- --coverage --testPathPattern=FileName`
+`CMD_TEST (project.conf'dan) -- --coverage --testPathPattern=FileName`
 Raporu kullanıcıya göster.
 
 ## @tdd-guide Subagent ile Fark

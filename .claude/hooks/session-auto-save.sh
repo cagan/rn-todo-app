@@ -18,7 +18,7 @@ $(git status --short 2>/dev/null || echo "Git repo yok")
 $(git log --oneline -5 2>/dev/null || echo "Git history yok")
 
 ## Test Durumu
-$(npm test --silent 2>&1 | tail -5 || echo "Test çalıştırılamadı")
+$(source "${CLAUDE_PROJECT_DIR:-.}/.claude/project.conf" 2>/dev/null; ${CMD_TEST:-echo "CMD_TEST tanımlı değil"} --silent 2>&1 | tail -5 || echo "Test çalıştırılamadı")
 
 ## Sonraki Session İçin
 Bu dosyayı oku ve devam et. Detay için /session-summary ile daha kapsamlı özet oluştur.

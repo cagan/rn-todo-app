@@ -1,0 +1,16 @@
+{
+  "name": "claude-harness",
+  "description": "Generic Claude Code development harness — TDD pipeline, subagents, quality gates, and deploy workflow. Works with any language/framework via project.conf.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Cagan"
+  },
+  "keywords": [
+    "tdd",
+    "harness",
+    "quality-gate",
+    "deploy",
+    "subagents",
+    "generic"
+  ]
+}
