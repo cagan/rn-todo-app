@@ -1,0 +1,51 @@
+# ============================================================
+# Claude Harness — Project Configuration
+# ============================================================
+# Bu dosya projeye ozel TUM degiskenleri tanimlar.
+# Agent'lar, skill'ler ve hook'lar bu dosyadan okur.
+# Yeni bir projeye tasirken SADECE bu dosyayi degistir.
+# ============================================================
+
+# --- Proje Bilgileri ---
+PROJECT_NAME=""
+PROJECT_LANG=""           # typescript, python, go, rust, java
+PROJECT_FRAMEWORK=""      # react-native, nextjs, django, gin, spring, none
+PROJECT_DESCRIPTION=""
+
+# --- Komutlar (hook'lar ve skill'ler tarafindan kullanilir) ---
+CMD_TEST=""               # npm test, pytest, go test ./...
+CMD_LINT=""               # npm run lint, flake8, golangci-lint run
+CMD_TYPECHECK=""          # npx tsc --noEmit, mypy .
+CMD_DEV=""                # npx expo start, python manage.py runserver
+CMD_BUILD=""              # eas build, docker build
+CMD_FORMAT=""             # prettier --write, black .
+
+# --- Dizin Yapisi ---
+DIR_SRC=""                # src/, app/, cmd/
+DIR_TESTS=""              # **/__tests__/, tests/
+
+# --- Dosya Uzantilari ---
+FILE_EXT_SOURCE=""        # ts,tsx / py / go / rs
+FILE_EXT_TEST=""          # .test.ts,.test.tsx / _test.py / _test.go
+FILE_GLOB_SOURCE=""       # *.{ts,tsx}
+
+# --- Kod Kurallari ---
+MAX_FUNCTION_LINES=30
+MAX_FILE_LINES=150
+TEST_COVERAGE_MIN=80
+STRICT_MODE=true
+NO_ANY=true
+NO_CONSOLE_LOG=true
+
+# --- Git Kurallari ---
+COMMIT_FORMAT="conventional"
+BRANCH_STRATEGY="feature"
+MAIN_BRANCH="main"
+PROTECTED_BRANCHES="main"
+
+# --- Lint / Typecheck Patterns ---
+CONSOLE_LOG_PATTERN="console\."
+CONSOLE_LOG_INCLUDE=""    # --include=*.ts --include=*.tsx
+
+# --- Dil (agent cikti dili) ---
+LANG_UI="en"              # tr, en

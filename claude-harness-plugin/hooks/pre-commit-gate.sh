@@ -1,17 +1,17 @@
 #!/bin/bash
 # pre-commit-gate.sh
-# Sadece "git commit" komutlarını yakala ve quality gate uygula
+# Sadece "git commit" komutlarini yakala ve quality gate uygula
 # Komutlar .claude/project.conf'dan okunur
 
-# Claude'un çalıştırdığı komutu al
+# Claude'un calistirdigi komutu al
 TOOL_INPUT="${CLAUDE_TOOL_INPUT:-}"
 
-# Commit komutu değilse çıkış (hook'u bypass et)
+# Sadece git commit komutlarini yakala
 if ! echo "$TOOL_INPUT" | grep -q "git commit"; then
   exit 0
 fi
 
-# project.conf'u yükle
+# project.conf'u yukle
 CONF="${CLAUDE_PROJECT_DIR:-.}/.claude/project.conf"
 if [ -f "$CONF" ]; then
   source "$CONF"
@@ -21,7 +21,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "Commit Gate — Pre-checks"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-# 1. Typecheck (CMD_TYPECHECK tanımlıysa)
+# 1. Typecheck (CMD_TYPECHECK tanimliysa)
 if [ -n "$CMD_TYPECHECK" ]; then
   echo "Typecheck kontrol ediliyor..."
   if ! $CMD_TYPECHECK --quiet 2>/dev/null; then
@@ -33,7 +33,7 @@ if [ -n "$CMD_TYPECHECK" ]; then
   echo "Typecheck: Temiz"
 fi
 
-# 2. Lint (CMD_LINT tanımlıysa)
+# 2. Lint (CMD_LINT tanimliysa)
 if [ -n "$CMD_LINT" ]; then
   echo "Lint kontrol ediliyor..."
   if ! $CMD_LINT --quiet 2>/dev/null; then
@@ -45,7 +45,7 @@ if [ -n "$CMD_LINT" ]; then
   echo "Lint: Temiz"
 fi
 
-# 3. Console.log kontrolü (NO_CONSOLE_LOG=true ise)
+# 3. Console.log kontrolu (NO_CONSOLE_LOG=true ise)
 if [ "$NO_CONSOLE_LOG" = "true" ] && [ -n "$DIR_SRC" ]; then
   PATTERN="${CONSOLE_LOG_PATTERN:-console\.}"
   CONSOLE_LOGS=$(grep -r "$PATTERN" "$DIR_SRC" $CONSOLE_LOG_INCLUDE -l 2>/dev/null)
@@ -58,7 +58,7 @@ if [ "$NO_CONSOLE_LOG" = "true" ] && [ -n "$DIR_SRC" ]; then
   echo "Console.log: Temiz"
 fi
 
-# 4. Test (CMD_TEST tanımlıysa)
+# 4. Test (CMD_TEST tanimliysa)
 if [ -n "$CMD_TEST" ]; then
   echo "Testler calistiriliyor..."
   if ! $CMD_TEST --silent 2>/dev/null; then

@@ -1,0 +1,42 @@
+# {{PROJECT_NAME}} — Claude Harness
+
+## Project Config
+Projeye ozel tum degiskenler `.claude/project.conf` dosyasinda tanimlidir.
+Agent'lar, skill'ler ve hook'lar bu dosyadan okur.
+**Yeni bir projeye tasirken sadece `project.conf` degistirilir.**
+
+## Stack
+{{PROJECT_DESCRIPTION}}
+
+## Rules (her zaman uy — bunlar rules/ klasorunde detaylidir)
+- Commit atmadan once tum testler gecmeli (project.conf: `CMD_TEST`)
+- `main` branch'e direkt commit yok — her zaman feature branch
+- Fonksiyon basina max satir (project.conf: `MAX_FUNCTION_LINES`)
+- Component/dosya basina max satir (project.conf: `MAX_FILE_LINES`)
+- Her yeni component/modul icin mutlaka test dosyasi yaz
+
+## Subagentlar
+Asagidaki subagentlari uygun durumlarda otomatik devreye al:
+- `@planner` -> Yeni feature baslamadan once plan cikar
+- `@architect` -> Mimari kararlar, klasor yapisi degisiklikleri
+- `@tdd-guide` -> Test yaz, sonra implementation
+- `@code-reviewer` -> Implementasyon bittikten sonra review
+- `@deployer` -> Commit, push ve deploy islemleri (her adimda onay zorunlu)
+
+## Skills (auto-invoked)
+- `implement-feature` -> planner -> architect -> tdd-guide -> implement -> review -> deploy pipeline
+- `deploy-pipeline` -> commit -> push -> deploy (her adimda onay zorunlu)
+- `tdd` -> Test yazma workflow'u
+- `refactor-clean` -> Dead code temizleme
+- `codemap-update` -> Codebase haritasini guncelle
+
+## Commands
+- `/implement-feature` -> Feature gelistirme pipeline'ini baslat
+- `/deploy` -> Deploy pipeline'ini baslat
+- `/tdd` -> TDD workflow'u baslat
+- `/refactor-clean` -> Temizlik workflow'u
+- `/codemap-update` -> Codemap guncelle
+
+## Session Memory
+Her session basinda kontrol et: `.claude/tmp/` klasorunde son session ozeti var mi?
+Varsa o dosyayi oku ve kaldigin yerden devam et.

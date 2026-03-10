@@ -1,0 +1,52 @@
+{
+  "hooks": {
+    "Bash": [
+      {
+        "matcher": "git commit",
+        "hooks": [
+          {
+            "type": "preToolExecution",
+            "command": "bash $PLUGIN_DIR/hooks/pre-commit-gate.sh"
+          }
+        ]
+      }
+    ],
+    "Write": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "postToolExecution",
+            "command": "bash $PLUGIN_DIR/hooks/post-write-lint.sh"
+          }
+        ]
+      }
+    ],
+    "Edit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "postToolExecution",
+            "command": "bash $PLUGIN_DIR/hooks/post-write-lint.sh"
+          }
+        ]
+      }
+    ],
+    "Agent": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "preToolExecution",
+            "command": "bash $PLUGIN_DIR/hooks/subagent-logger.sh"
+          },
+          {
+            "type": "postToolExecution",
+            "command": "bash $PLUGIN_DIR/hooks/subagent-logger.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
